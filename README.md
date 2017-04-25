@@ -7,6 +7,13 @@ Slightly modified version of [Connect2id Simple HTTP Based Claims Source](https:
 - Renamed packages to match other Lonely Planet projects
 - Fixed broken unit test
 
+### How to release to bintray
+
+1. Bump the version in `pom.xml`
+2. Run `mvn jar:jar`
+3. Find the project in bintray and create a new version
+4. Manually upload and publish the artifact
+
 ---
 
 Connector for sourcing OpenID Connect claims about a subject (end-user) from an HTTP endpoint. 
