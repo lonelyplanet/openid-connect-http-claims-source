@@ -10,7 +10,7 @@
 
     <groupId>com.lonelyplanet</groupId>
     <artifactId>oidc-claims-source-http</artifactId>
-    <version>0.1</version>
+    <version>0.2</version>
     <packaging>jar</packaging>
 
     <name>OpenID Connect HTTP claims source</name>
