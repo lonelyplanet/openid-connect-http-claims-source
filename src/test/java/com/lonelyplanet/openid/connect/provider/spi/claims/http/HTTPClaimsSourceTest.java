@@ -35,11 +35,16 @@ public class HTTPClaimsSourceTest {
 		
 		private Set<String> expectedClaimNames;
 		
+		
+		private List<LangTag> expectedLangTags;
+		
+		
 		public JSONObjectMatcher(Subject expectedSubject, Set<String> expectedClaimNames, List<LangTag> expectedLangTags) {
 			assertNotNull(expectedSubject);
 			this.expectedSubject = expectedSubject;
 			assertNotNull(expectedClaimNames);
 			this.expectedClaimNames = expectedClaimNames;
+			this.expectedLangTags = expectedLangTags;
 		}
 		
 		
@@ -114,10 +119,10 @@ public class HTTPClaimsSourceTest {
 			"name",
 			"given_name",
 			"family_name"
-        ));
+			));
 		
 		UserInfo resultToReturn = new UserInfo(new Subject("alice"));
-		resultToReturn.setEmailAddress("alice@wonderland.net");
+		resultToReturn.setEmail(new InternetAddress("alice@wonderland.net"));
 		resultToReturn.setEmailVerified(true);
 		resultToReturn.setName("Alice Adams");
 		resultToReturn.setGivenName("Alice");
@@ -126,6 +131,7 @@ public class HTTPClaimsSourceTest {
 		onRequest()
 			.havingMethodEqualTo("POST")
 			.havingPathEqualTo("/claims-source/")
+			.havingBody(new JSONObjectMatcher(new Subject("alice"), requestedClaims, null))
 			.respond()
 			.withStatus(200)
 			.withBody(resultToReturn.toJSONObject().toJSONString())

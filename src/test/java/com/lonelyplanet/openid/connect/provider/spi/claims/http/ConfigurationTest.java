@@ -21,6 +21,7 @@ public class ConfigurationTest {
 		Properties props = new Properties();
 
 		props.setProperty("op.httpClaimsSource.enable", "true");
+		props.setProperty("op.httpClaimsSource.supportedClaims", "email, email_verified, name, given_name, family_name");
 		props.setProperty("op.httpClaimsSource.url", "https://example.com/claims-source");
 		props.setProperty("op.httpClaimsSource.connectTimeout", "250");
 		props.setProperty("op.httpClaimsSource.readTimeout", "500");
@@ -30,6 +31,12 @@ public class ConfigurationTest {
 		Configuration config = new Configuration(props);
 
 		assertTrue(config.enable);
+		assertTrue(config.supportedClaims.contains("email"));
+		assertTrue(config.supportedClaims.contains("email_verified"));
+		assertTrue(config.supportedClaims.contains("name"));
+		assertTrue(config.supportedClaims.contains("given_name"));
+		assertTrue(config.supportedClaims.contains("family_name"));
+		assertEquals(5, config.supportedClaims.size());
 		assertEquals("https://example.com/claims-source", config.url.toString());
 		assertEquals(250, config.connectTimeout);
 		assertEquals(500, config.readTimeout);

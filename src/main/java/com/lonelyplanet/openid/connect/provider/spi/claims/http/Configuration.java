@@ -2,6 +2,7 @@ package com.lonelyplanet.openid.connect.provider.spi.claims.http;
 
 
 import java.net.URL;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
@@ -50,7 +51,16 @@ public final class Configuration implements LoggableConfiguration {
 	 * <p>Property key: [prefix]enable
 	 */
 	public final boolean enable;
-
+	
+	
+	/**
+	 * The names of the supported (standard and custom) OpenID Connect
+	 * claims.
+	 *
+	 * <p>Property key: [prefix]supportedClaims
+	 */
+	public final List<String> supportedClaims;
+	
 	
 	/**
 	 * The URL of the HTTP endpoint for sourcing the OpenID Connect claims.
@@ -116,6 +126,7 @@ public final class Configuration implements LoggableConfiguration {
 			enable = pr.getBoolean(DEFAULT_PREFIX + "enable");
 			
 			if (! enable) {
+				supportedClaims = Collections.emptyList();
 				url = null;
 				connectTimeout = 0;
 				readTimeout = 0;
@@ -123,6 +134,20 @@ public final class Configuration implements LoggableConfiguration {
 				apiAccessToken = null;
 				return;
 			}
+			
+			String claimsStrig = pr.getString(DEFAULT_PREFIX + "supportedClaims");
+			
+			List<String> claimsList = new LinkedList<>();
+			
+			for (String claimName: StringUtils.split(claimsStrig, ", ")) {
+				claimsList.add(claimName);
+			}
+			
+			if (claimsList.isEmpty()) {
+				throw new PropertyParseException("Missing supported claims", DEFAULT_PREFIX + "supportedClaims");
+			}
+			
+			supportedClaims = Collections.unmodifiableList(claimsList);
 
 			url = pr.getURL(DEFAULT_PREFIX + "url");
 			
@@ -156,6 +181,8 @@ public final class Configuration implements LoggableConfiguration {
 		if (! enable) {
 			return;
 		}
+		
+		log.info("[CSHTTP0002] HTTP claims source supported claims: {}", supportedClaims);
 		
 		if ("https".equalsIgnoreCase(url.getAuthority())) {
 			log.info("[CSHTTP0003] HTTP claims source URL: {}", url);

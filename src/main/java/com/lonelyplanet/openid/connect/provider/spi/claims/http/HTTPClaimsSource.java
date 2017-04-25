@@ -54,7 +54,7 @@ public class HTTPClaimsSource implements ClaimsSource {
 	 * Creates a new HTTP claims source. It must be {@link #init
 	 * initialised} before it can be used.
 	 */
-	public  HTTPClaimsSource() { }
+	public HTTPClaimsSource() { }
 
 
 	/**
@@ -151,7 +151,13 @@ public class HTTPClaimsSource implements ClaimsSource {
 
 	@Override
 	public Set<String> supportedClaims() {
-        return Collections.unmodifiableSet(new HashSet<String>());
+
+		if (! config.enable) {
+			// Empty set
+			return Collections.unmodifiableSet(new HashSet<String>());
+		}
+
+		return Collections.unmodifiableSet(new HashSet<>(config.supportedClaims));
 	}
 
 

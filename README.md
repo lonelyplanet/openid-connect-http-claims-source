@@ -4,8 +4,8 @@ Slightly modified version of [Connect2id Simple HTTP Based Claims Source](https:
 
 ### Notable changes
 
-- Removed support for "supported claims" configuration options. Now all requested claims will be sent to the underlying service.
 - Renamed packages to match other Lonely Planet projects
+- Fixed broken unit test
 
 ---
 
